@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    .quiz-container {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .answer {
+      display: block;
+      margin: 8px 0;
+    }
+    .btn {
+      margin-top: 15px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div id="quiz">
+      <div class="question" id="question"></div>
+      <div id="answers"></div>
+      <button class="btn" onclick="nextQuestion()">Next</button>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "What is the capital of France?",
+        options: ["Paris", "Rome", "Berlin", "Madrid"],
+        answer: "Paris"
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Jupiter", "Saturn"],
+        answer: "Mars"
+      },
+      {
+        question: "Who wrote 'Hamlet'?",
+        options: ["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"],
+        answer: "William Shakespeare"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").textContent = q.question;
+      const answers = document.getElementById("answers");
+      answers.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.className = "answer btn";
+        btn.onclick = () => checkAnswer(option);
+        answers.appendChild(btn);
+      });
+
+      document.getElementById("result").textContent = "";
+    }
+
+    function checkAnswer(selected) {
+      const correct = questions[currentQuestion].answer;
+      if (selected === correct) {
+        score++;
+        document.getElementById("result").textContent = "Correct!";
+      } else {
+        document.getElementById("result").textContent = `Wrong! The correct answer is ${correct}.`;
+      }
+      document.querySelectorAll(".answer").forEach(btn => btn.disabled = true);
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById("quiz").innerHTML = `
+          <h2>Quiz Completed!</h2>
+          <p>Your score: ${score} out of ${questions.length}</p>
+        `;
+      }
+    }
+
+    // Start the quiz
+    showQuestion();
+  </script>
+</body>
+</html>
